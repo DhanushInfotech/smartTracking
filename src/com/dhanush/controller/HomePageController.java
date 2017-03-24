@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.dhanush.domain.EquipmentMaster;
 import com.dhanush.domain.EquipmentType;
 import com.dhanush.domain.Facility;
 import com.dhanush.domain.User;
@@ -22,6 +24,12 @@ public class HomePageController {
 
 	@Autowired
 	UserService userService;
+	
+	
+	public HomePageController(UserService userService) {
+		// TODO Auto-generated constructor stub
+		this.userService = userService;
+	}
 
 	@RequestMapping("/register")
 	public ModelAndView registerUser(@ModelAttribute User user) {
@@ -37,15 +45,7 @@ System.out.println("Equipment Type List: " +userList.get(0).getNAME());
 	 for(int i =0;i<facilityList.size(); i++){
 	  facilitylistt.add(facilityList.get(i).getEquipment_Name());
 	 }
-		List<String> genderList = new ArrayList<String>();		
-		genderList.add("male");
-		genderList.add("female");
-
-		//List<String> typeList = new ArrayList<String>();
-		
-		
-		Map<String, List> map = new HashMap<String, List>();
-		map.put("genderList", genderList);
+	Map<String, List> map = new HashMap<String, List>();
 		map.put("typeList", typeList);
 		map.put("facilitylistt", facilitylistt);
 		return new ModelAndView("register", "map", map);
@@ -65,18 +65,6 @@ System.out.println("Equipment Type List: " +userList.get(0).getNAME());
 			System.out.println("Insert request invoked2");
 		return "redirect:/getList";
 	}
-	
-	
-	@RequestMapping("/inserts")
-	public String insertEquipment(@ModelAttribute EquipmentMaster em) {
-		System.out.println("1");
-		System.out.println("test: "+em.getEquipment_Name());
-		if (em != null)
-			userService.insertEquipment(em);
-		return "redirect:/getList";
-	}
-	
-
 @RequestMapping("/getList")
 	public ModelAndView getUserLIst() {
 	System.out.println("First Enter 6");
@@ -87,32 +75,8 @@ System.out.println("Equipment Type List: " +userList.get(0).getNAME());
 		return new ModelAndView("userList", "userList", userList);
 	}
 
-	@RequestMapping("/edit")
-	public ModelAndView editUser(@RequestParam String id,
-			@ModelAttribute User user) {
 
-		user = userService.getUser(id);
-
-		List<String> genderList = new ArrayList<String>();
-		genderList.add("male");
-		genderList.add("female");
-
-		List<String> cityList = new ArrayList<String>();
-		cityList.add("delhi");
-		cityList.add("gurgaon");
-		cityList.add("meerut");
-		cityList.add("noida");
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("genderList", genderList);
-		map.put("cityList", cityList);
-		map.put("user", user);
-
-		return new ModelAndView("edit", "map", map);
-
-	}
-
-	@RequestMapping("/update")
+	/*@RequestMapping("/update")
 	public String updateUser(@ModelAttribute User user) {
 		userService.updateData(user);
 		return "redirect:/getList";
@@ -125,6 +89,6 @@ System.out.println("Equipment Type List: " +userList.get(0).getNAME());
 		userService.deleteData(id);
 		return "redirect:/getList";
 	}
-	
+	*/
 	
 }
